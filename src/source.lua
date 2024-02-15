@@ -1,3 +1,4 @@
+-- version 0.1.0
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService('UserInputService')
@@ -17,8 +18,8 @@ type WindowArgs = {
 	title: string,
 	description: string,
 	serverCode: string,
-	onStartup: () -> any,
-	onCheck: () -> any,
+	onStartup: () -> boolean,
+	onCheck: (key: string) -> boolean,
 	onCopy: () -> any,
 }
 
@@ -139,7 +140,7 @@ function Library:CreateWindow(args: WindowArgs)
 		Size = UDim2.new(1, 0, 0.25, 0),
 	})
 
-	self:new("TextBox", {
+	local Enter = self:new("TextBox", {
 		self:new("UICorner", {
 			CornerRadius = UDim.new(0, 3)
 		});
@@ -150,7 +151,8 @@ function Library:CreateWindow(args: WindowArgs)
 		Position = UDim2.new(0.5, 0, 0.5, 0),
 		Size = UDim2.new(0.95, 0, 0.85, 0),
 		Font = Enum.Font.GothamMedium,
-		Text = "Paste your key...",
+		PlaceholderText = "Paste your key...",
+		Text = "",
 		TextColor3 = Color3.fromRGB(200, 200, 200),
 		TextSize = 14,
 	})
@@ -218,8 +220,43 @@ function Library:CreateWindow(args: WindowArgs)
 		TextSize = 14,
 	})
 
-	Check.MouseButton1Click:Connect(args and args.onCheck or function() end)
-	Copy.MouseButton1Click:Connect(args and args.onCopy or function() end)
+	local function onCheck()
+		if args and args.onCheck then
+			if args.onCheck(Enter.Text) then
+				Check.Text = "Correct"
+				Check.TextColor3 = Color3.fromRGB(0, 235, 0)
+
+				task.delay(1, function()
+					ScreenGui:Destroy()
+				end)
+			else
+				Check.Text = "Incorrect"
+				Check.TextColor3 = Color3.fromRGB(235, 0, 0)
+
+				task.delay(1, function()
+					Check.Text = "Check"
+					Check.TextColor3 = Color3.fromRGB(235, 235, 235)
+				end)
+			end
+		end
+	end
+
+	local function onCopy()
+		if args and args.onCopy then
+			args.onCopy()
+
+			Copy.Text = "Copied"
+			Copy.TextColor3 = Color3.fromRGB(0, 235, 0)
+
+			task.delay(1, function()
+				Copy.TextColor3 = Color3.fromRGB(235, 235, 235)
+				Copy.Text = "Copy"
+			end)
+		end
+	end
+
+	Check.MouseButton1Click:Connect(onCheck)
+	Copy.MouseButton1Click:Connect(onCopy)
 
 	Invite.MouseButton1Click:Connect(function()
 		if request then
