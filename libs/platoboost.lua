@@ -125,8 +125,4 @@ function lib:verify(key)
 end;
 -- Plato global functions [END]
 
-return function(id)
-    if id then lib.accountId = id end
-
-    return lib
-end
+return lib
