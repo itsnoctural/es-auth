@@ -10,17 +10,18 @@ local onMessage = function(message)
 end;
 
 -- Plato internals [START]
+local Library = {}
 local fRequest, fStringFormat, fSpawn, fWait = request or http.request or http_request or syn.request, string.format, task.spawn, task.wait;
 local localPlayerId = game:GetService("Players").LocalPlayer.UserId;
 local rateLimit, rateLimitCountdown, errorWait = false, 0, false;
 -- Plato internals [END]
 
 -- Plato global functions [START]
-function getLink()
+function Library:getLink()
     return fStringFormat("https://gateway.platoboost.com/a/%i?id=%i", accountId, localPlayerId);
 end;
 
-function verify(key)
+function Library:verify(key)
     if errorWait or rateLimit then 
         return false;
     end;
@@ -122,3 +123,5 @@ function verify(key)
     end;
 end;
 -- Plato global functions [END]
+
+return Library

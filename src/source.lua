@@ -259,6 +259,8 @@ function Library:CreateWindow(args: WindowArgs)
 	Copy.MouseButton1Click:Connect(onCopy)
 
 	Invite.MouseButton1Click:Connect(function()
+		if setclipboard then setclipboard(args.serverCode) end
+
 		if request then
 			request({
 				Url = 'http://127.0.0.1:6463/rpc?v=1',
