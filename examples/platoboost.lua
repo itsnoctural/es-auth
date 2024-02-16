@@ -1,4 +1,4 @@
-local PlatoBoost = loadstring(game:HttpGet("https://raw.githubusercontent.com/itsnoctural/es-auth/main/libs/platoboost.lua"))()
+local PlatoBoost = loadstring(game:HttpGet("https://raw.githubusercontent.com/itsnoctural/es-auth/main/libs/platoboost.lua"))(0) -- Change 0 to your platoboost's account id
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/itsnoctural/es-auth/main/src/source.lua"))()
 
 local FileName = "Key.txt"

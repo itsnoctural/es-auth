@@ -1,8 +1,10 @@
 -- Plato configuration
-local accountId = 0; -- Plato account id [IMPORTANT]
-local allowPassThrough = false; -- Allow user through if error occurs, may reduce security
-local allowKeyRedeeming = false; -- Automatically check keys to redeem if valid
-local useDataModel = false;
+local lib = {
+    accountId = 0; -- Plato account id [IMPORTANT]
+    allowPassThrough = false; -- Allow user through if error occurs, may reduce security
+    allowKeyRedeeming = false; -- Automatically check keys to redeem if valid
+    useDataModel = false;
+}
 
 -- Plato callbacks
 local onMessage = function(message)
@@ -10,27 +12,26 @@ local onMessage = function(message)
 end;
 
 -- Plato internals [START]
-local Library = {}
 local fRequest, fStringFormat, fSpawn, fWait = request or http.request or http_request or syn.request, string.format, task.spawn, task.wait;
 local localPlayerId = game:GetService("Players").LocalPlayer.UserId;
 local rateLimit, rateLimitCountdown, errorWait = false, 0, false;
 -- Plato internals [END]
 
 -- Plato global functions [START]
-function Library:getLink()
-    return fStringFormat("https://gateway.platoboost.com/a/%i?id=%i", accountId, localPlayerId);
+function lib:getLink()
+    return fStringFormat("https://gateway.platoboost.com/a/%i?id=%i", self.accountId, localPlayerId);
 end;
 
-function Library:verify(key)
+function lib:verify(key)
     if errorWait or rateLimit then 
         return false;
     end;
 
     onMessage("Checking key...");
 
-    if (useDataModel) then
+    if (self.useDataModel) then
         local status, result = pcall(function() 
-            return game:HttpGetAsync(fStringFormat("https://api-gateway.platoboost.com/v1/public/whitelist/%i/%i?key=%s", accountId, localPlayerId, key));
+            return game:HttpGetAsync(fStringFormat("https://api-gateway.platoboost.com/v1/public/whitelist/%i/%i?key=%s", self.accountId, localPlayerId, key));
         end);
         
         if status then
@@ -40,7 +41,7 @@ function Library:verify(key)
             elseif string.find(result, "false") then
                 if allowKeyRedeeming then
                     local status1, result1 = pcall(function()
-                        return game:HttpPostAsync(fStringFormat("https://api-gateway.platoboost.com/v1/authenticators/redeem/%i/%i/%s", accountId, localPlayerId, key), {});
+                        return game:HttpPostAsync(fStringFormat("https://api-gateway.platoboost.com/v1/authenticators/redeem/%i/%i/%s", self.accountId, localPlayerId, key), {});
                     end);
 
                     if status1 then
@@ -58,12 +59,12 @@ function Library:verify(key)
             end;
         else
             onMessage("An error occured while contacting the server!");
-            return allowPassThrough;
+            return self.allowPassThrough;
         end;
     else
         local status, result = pcall(function() 
             return fRequest({
-                Url = fStringFormat("https://api-gateway.platoboost.com/v1/public/whitelist/%i/%i?key=%s", accountId, localPlayerId, key),
+                Url = fStringFormat("https://api-gateway.platoboost.com/v1/public/whitelist/%i/%i?key=%s", self.accountId, localPlayerId, key),
                 Method = "GET"
             });
         end);
@@ -74,10 +75,10 @@ function Library:verify(key)
                     onMessage("Successfully whitelisted key!");
                     return true;
                 else
-                    if (allowKeyRedeeming) then
+                    if (self.allowKeyRedeeming) then
                         local status1, result1 = pcall(function() 
                             return fRequest({
-                                Url = fStringFormat("https://api-gateway.platoboost.com/v1/authenticators/redeem/%i/%i/%s", accountId, localPlayerId, key),
+                                Url = fStringFormat("https://api-gateway.platoboost.com/v1/authenticators/redeem/%i/%i/%s", self.accountId, localPlayerId, key),
                                 Method = "POST"
                             });
                         end);
@@ -115,13 +116,17 @@ function Library:verify(key)
                     end); 
                 end;
             else
-                return allowPassThrough;
+                return self.allowPassThrough;
             end;    
         else
-            return allowPassThrough;
+            return self.allowPassThrough;
         end;
     end;
 end;
 -- Plato global functions [END]
 
-return Library
+return function(id)
+    if id then lib.accountId = id end
+
+    return lib
+end
