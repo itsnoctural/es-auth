@@ -13,7 +13,7 @@ Library:CreateWindow({
         local isNeedKey = not (isfile(FileName) and PlatoBoost:verify(readfile(FileName)))  
         
         if not isNeedKey then
-            print("Passed.")
+            print("[Startup] Passed.")
         end
 
         return isNeedKey
@@ -22,6 +22,7 @@ Library:CreateWindow({
         local isCorrect = PlatoBoost:verify(entered)
 
         if isCorrect then
+            print("Passed.")
             writefile(FileName, entered)
         end
 

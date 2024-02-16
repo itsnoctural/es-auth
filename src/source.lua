@@ -226,7 +226,7 @@ function Library:CreateWindow(args: WindowArgs)
 				Check.Text = "Correct"
 				Check.TextColor3 = Color3.fromRGB(0, 235, 0)
 
-				task.delay(1, function()
+				task.delay(.1, function()
 					ScreenGui:Destroy()
 				end)
 			else
