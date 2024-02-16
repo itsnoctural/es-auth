@@ -126,11 +126,14 @@ function Library:CreateWindow(args: WindowArgs)
 	self:new("TextLabel", {
 		Parent = Content,
 		BackgroundTransparency = 1,
-		Size = UDim2.new(1, 0, 0.35, 0),
+		AnchorPoint = Vector2.new(.5, 0),
+		Position = UDim2.new(.5, 0, 0, 0),
+		Size = UDim2.new(.9, 0, 0.35, 0),
 		Font = Enum.Font.GothamMedium,
 		Text = args and args.description or "Description",
 		TextColor3 = Color3.fromRGB(215, 215, 215),
 		TextSize = 14,
+		TextWrapped = true,
 	})
 
 	local Field = self:new("Frame", {
