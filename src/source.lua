@@ -179,7 +179,7 @@ function Library:CreateWindow(args: WindowArgs)
 		AnchorPoint = Vector2.new(0, 0.5),
 		Position = UDim2.new(0.025, 0, 0.5, 0),
 		Size = UDim2.new(0.465, 0, 0.9, 0),
-		Text = "Check",
+		Text = "Check Key",
 		TextSize = 14,
 	})
 
@@ -195,7 +195,7 @@ function Library:CreateWindow(args: WindowArgs)
 		AnchorPoint = Vector2.new(0, 0.5),
 		Position = UDim2.new(0.515, 0, 0.5, 0),
 		Size = UDim2.new(0.465, 0, 0.9, 0),
-		Text = "Copy",
+		Text = "Copy Key Link",
 		TextSize = 14,
 	})
 
