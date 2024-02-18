@@ -18,6 +18,7 @@ type WindowArgs = {
 	title: string,
 	description: string,
 	serverCode: string,
+	supportLabel: boolean
 	onStartup: () -> boolean,
 	onCheck: (key: string) -> boolean,
 	onCopy: () -> any,
@@ -222,6 +223,20 @@ function Library:CreateWindow(args: WindowArgs)
 		Text = args and "discord.gg/" .. args.serverCode or "discord.gg",
 		TextSize = 14,
 	})
+
+	if args.supportLabel then
+		local ThanksTo = self:new("TextLabel", {
+			Parent = Discord
+			BackgroundTransparency = 1
+			Position = UDim2.new(0, 0, 1.15, 0)
+			Size = UDim2.new(1, 0, 0.35, 0)
+			Font = Enum.Font.GothamBold
+			Text = "Script exists thanks to you and Key System."
+			TextColor3 = Color3.fromRGB(195, 195, 195)
+			TextScaled = true
+			TextWrapped = true
+		})
+	end
 
 	local function onCheck()
 		if args and args.onCheck then

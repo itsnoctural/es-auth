@@ -9,6 +9,7 @@ Library:CreateWindow({
 	title = "Example Title",
 	description = "Description",
 	serverCode = "HjKDVu2rAH",
+    supportLabel = true,
     onStartup = function()
         local isNeedKey = not (isfile(FileName) and PlatoBoost:verify(readfile(FileName)))  
         
