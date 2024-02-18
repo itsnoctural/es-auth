@@ -18,7 +18,7 @@ type WindowArgs = {
 	title: string,
 	description: string,
 	serverCode: string,
-	supportLabel: boolean
+	supportLabel: boolean,
 	onStartup: () -> boolean,
 	onCheck: (key: string) -> boolean,
 	onCopy: () -> any,
@@ -225,7 +225,7 @@ function Library:CreateWindow(args: WindowArgs)
 	})
 
 	if args.supportLabel then
-		local ThanksTo = self:new("TextLabel", {
+		self:new("TextLabel", {
 			Parent = Discord
 			BackgroundTransparency = 1
 			Position = UDim2.new(0, 0, 1.15, 0)
